@@ -17,6 +17,17 @@ def get_company_data(siren: str) -> dict:
     response = requests.get(url, params=params, headers=headers)
     return response.json()
 
+def search_company(query: str) -> dict:
+    url = "https://api.pappers.fr/v2/recherche"
+    params = {
+        'q': query,
+        'bases': 'entreprises, documents'
+    }
+    headers = {
+        'api-key': pappers_api_key
+    }
+    response = requests.get(url, params=params, headers=headers)
+    return response.json()
 
 tools = [
     {
@@ -29,12 +40,24 @@ tools = [
             },
             "required": ["siren"]
         }
+    },
+    {
+        "name": "search_company",
+        "description": "Search for a company on Pappers.fr using name of the company or leader name",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "The name of the company or leader name"}
+            },
+            "required": ["query"]
+        }
     }
 ]
 
 
 mapping_tool_function = {
-    "get_company_data": get_company_data
+    "get_company_data": get_company_data,
+    "search_company": search_company
 }
 
 
