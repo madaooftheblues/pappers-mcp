@@ -1,28 +1,40 @@
+import os
+import dotenv
 import json
+import requests
 
+dotenv.load_dotenv()
+pappers_api_key = os.environ.get("PAPPERS_API_KEY")
 
-def sum(a: int, b: int) -> int:
-    return a + b
+def get_company_data(siren: str) -> dict:
+    url = "https://api.pappers.fr/v2/entreprise"
+    params = {
+        'siren': siren 
+    }
+    headers = {
+        'api-key': pappers_api_key
+    }
+    response = requests.get(url, params=params, headers=headers)
+    return response.json()
 
 
 tools = [
     {
-        "name": "sum",
-        "description": "Sum two numbers",
+        "name": "get_company_data",
+        "description": "Get company data from Pappers.fr",
         "input_schema": {
             "type": "object",
             "properties": {
-                "a": {"type": "integer"},
-                "b": {"type": "integer"}
+                "siren": {"type": "string", "description": "The SIREN of the company"}
             },
-            "required": ["a", "b"]
+            "required": ["siren"]
         }
     }
 ]
 
 
 mapping_tool_function = {
-    "sum": sum
+    "get_company_data": get_company_data
 }
 
 
