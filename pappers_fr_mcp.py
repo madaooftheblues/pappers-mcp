@@ -2,10 +2,14 @@ import os
 import dotenv
 import json
 import requests
+from mcp.server.fastmcp import FastMCP
 
 dotenv.load_dotenv()
 pappers_api_key = os.environ.get("PAPPERS_API_KEY")
 
+mcp = FastMCP("pappers_fr")
+
+@mcp.tool()
 def get_company_data(siren: str) -> dict:
     url = "https://api.pappers.fr/v2/entreprise"
     params = {
@@ -17,6 +21,7 @@ def get_company_data(siren: str) -> dict:
     response = requests.get(url, params=params, headers=headers)
     return response.json()
 
+@mcp.tool()
 def search_company(query: str) -> dict:
     url = "https://api.pappers.fr/v2/recherche"
     params = {
@@ -75,3 +80,6 @@ def execute_tool(tool_name: str, tool_args):
         result = str(result)
 
     return result
+
+if __name__ == "__main__":
+    mcp.run(transport="stdio")

@@ -1,0 +1,11 @@
+{
+    "mcpServers": {
+        "pappers_fr":{
+            "command": "uv",
+            "args": [
+                "run",
+                "pappers_fr_mcp.py"
+            ]
+        }
+    }
+}
